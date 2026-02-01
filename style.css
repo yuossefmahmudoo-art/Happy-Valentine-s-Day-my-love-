@@ -405,12 +405,20 @@ h3 {
 }
 
 .success-msg {
-    color: #4caf50;
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 1.3em;
     text-align: center;
-    margin: 10px 0;
-    font-weight: bold;
-    font-size: 1.2em;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     animation: bounceIn 0.6s;
+    margin: 20px 0;
+}
+
+.success-msg::before {
+    content: "🎉 ";
+    font-size: 1.5em;
 }
 
 @keyframes bounceIn {
@@ -530,6 +538,8 @@ h3 {
     cursor: pointer;
     transition: all 0.3s;
     font-size: 2em;
+    position: relative;
+    overflow: hidden;
 }
 
 .treasure-item:hover {
@@ -538,15 +548,48 @@ h3 {
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
+.treasure-item::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(233, 30, 99, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.treasure-item:active::after {
+    width: 200%;
+    height: 200%;
+}
+
 .treasure-item.found {
     background: #c8e6c9;
     border-color: #4caf50;
     animation: foundAnimation 0.5s;
 }
 
+.treasure-item.found::before {
+    content: "✨";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 2em;
+    animation: sparkle 1s ease-out;
+}
+
 @keyframes foundAnimation {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.2) rotate(360deg); }
+}
+
+@keyframes sparkle {
+    0% { opacity: 0; transform: rotate(0deg) scale(0); }
+    50% { opacity: 1; transform: rotate(180deg) scale(1.5); }
+    100% { opacity: 0; transform: rotate(360deg) scale(0); }
 }
 
 .love-counter {
@@ -666,30 +709,74 @@ h3 {
     font-size: 1.2em;
 }
 
-.secret-code {
+/* ستايل لعبة ترتيب الكلمات الجديد */
+.sentence-area {
+    min-height: 80px;
+    background: white;
+    border: 2px dashed #e91e63;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 25px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     gap: 10px;
-    margin: 20px 0;
-}
-
-.code-input {
-    width: 60px;
-    height: 70px;
-    text-align: center;
-    font-size: 2em;
-    border: 3px solid #e91e63;
-    border-radius: 10px;
-    font-weight: bold;
-    color: #c2185b;
     transition: all 0.3s;
 }
 
-.code-input:focus {
-    outline: none;
-    border-color: #f5576c;
-    box-shadow: 0 0 15px rgba(233, 30, 99, 0.5);
-    transform: scale(1.1);
+.sentence-area.correct {
+    border-color: #4caf50;
+    background: #e8f5e9;
+    border-style: solid;
+}
+
+.placeholder-text {
+    color: #999;
+    font-style: italic;
+}
+
+.words-bank {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.word-chip {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    user-select: none;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+.word-chip:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 15px rgba(233, 30, 99, 0.3);
+}
+
+.word-chip:active {
+    transform: scale(0.95);
+}
+
+.control-btns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
 }
 
 .hint-box {
@@ -716,12 +803,6 @@ h3 {
     font-size: 5em;
     margin: 20px 0;
     animation: shake 3s infinite;
-}
-
-@keyframes shake {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-5deg); }
-    75% { transform: rotate(5deg); }
 }
 
 .album-preview {
@@ -868,6 +949,92 @@ h3 {
 .close-modal:hover {
     color: #ff0080;
     transform: scale(1.2) rotate(90deg);
+}
+
+/* مودال الذكريات */
+.memory-modal {
+    display: none;
+    position: fixed;
+    z-index: 10001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    animation: fadeIn 0.3s ease-in;
+}
+
+.memory-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 50px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    animation: zoomIn 0.5s ease-out;
+    max-width: 90%;
+    width: 500px;
+}
+
+.memory-icon {
+    font-size: 100px;
+    animation: heartPop 0.6s ease-out;
+    margin-bottom: 20px;
+}
+
+@keyframes heartPop {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.memory-modal-content h3 {
+    color: #e91e63;
+    font-size: 2em;
+    margin: 20px 0;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.memory-modal-content p {
+    color: #5d4037;
+    font-size: 1.2em;
+    margin: 20px 0;
+    line-height: 1.8;
+    animation: fadeIn 0.8s ease-out;
+    white-space: pre-line;
+}
+
+/* رسائل التنبيه المخصصة */
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    font-size: 1.3em;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    z-index: 10002;
+    animation: shake 0.5s, fadeIn 0.3s;
+    font-weight: bold;
+}
+
+.custom-alert::before {
+    content: "💔";
+    font-size: 2em;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .love-letter {
@@ -1058,5 +1225,10 @@ h3 {
     
     .welcome-title {
         font-size: 1.8em;
+    }
+    
+    .memory-modal-content {
+        padding: 30px;
+        width: 95%;
     }
 }

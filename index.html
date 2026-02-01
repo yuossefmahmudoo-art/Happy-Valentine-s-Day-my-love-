@@ -20,8 +20,8 @@
     <div class="floating-hearts" id="floatingHearts"></div>
 
     <!-- مشغل الموسيقى -->
-    <audio id="bgMusic" loop>
-        <source src="https://files.catbox.moe/ee9agb.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://image2url.com/r2/default/audio/1769942928702-1f67a206-96cc-4e0a-b975-eac690f7dd33.mp3" type="audio/mpeg">
     </audio>
 
     <button class="music-control" id="musicBtn">
@@ -36,11 +36,21 @@
         </div>
     </div>
 
+    <!-- مودال الذكريات -->
+    <div id="memoryModal" class="memory-modal">
+        <div class="memory-modal-content">
+            <div class="memory-icon">💖</div>
+            <h3 id="memoryTitle">لقيتي قلب!</h3>
+            <p id="memoryText">ذكرى جميلة...</p>
+            <button class="btn btn-secondary" id="closeMemoryBtn">حلو أوي 💕</button>
+        </div>
+    </div>
+
     <div class="container">
         <!-- صفحة 1: الترحيب -->
         <div id="page1">
             <div class="heart"></div>
-            <h1>❤️ رحلة الحب ❤️</h1>
+            <h1>❤️ بحبك يا منتي❤️</h1>
             <div class="date-box">
                 📅 الجمعة 14 فبراير 2026 📅<br>
                 عيد حب خاص لأغلى إنسانة في حياتي
@@ -111,26 +121,34 @@
             </div>
         </div>
 
-        <!-- صفحة 4: الكود السري -->
+        <!-- صفحة 4: لعبة كلمات الحب (تم استبدال الكود السري) -->
         <div id="page4" class="hidden">
             <div class="gift-content">
-                <h2>🔐 المحطة الثالثة: الكود السري 🔐</h2>
+                <h2>💌 المحطة الثالثة: كلمات من القلب 💌</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress3">42%</div>
                 </div>
                 <div class="puzzle-box">
                     <div class="riddle-text">
-                        أدخلي الكود السري:<br>
-                        "عدد أيام الأسبوع ✖️ 3"
+                        رتبي الكلمات دي علشان تكوني جملة بتمثل إحساسي ناحيتك 💕
                     </div>
-                    <div class="secret-code">
-                        <input type="number" class="code-input" id="code1" maxlength="1" max="9">
-                        <input type="number" class="code-input" id="code2" maxlength="1" max="9">
+                    
+                    <!-- مساحة الجملة -->
+                    <div class="sentence-area" id="sentenceArea">
+                        <span class="placeholder-text">اضغطي على الكلمات بالترتيب...</span>
                     </div>
-                    <button class="btn" id="checkCodeBtn">تحقق من الكود 🔓</button>
-                    <div id="codeMsg" class="error-msg hidden"></div>
+                    
+                    <!-- بنك الكلمات -->
+                    <div class="words-bank" id="wordsBank"></div>
+
+                    <div class="control-btns">
+                        <button class="btn btn-secondary" id="resetWordsBtn" style="width: auto; display: inline-block;">🔄 إعادة ترتيب</button>
+                        <button class="btn pulse-btn" id="checkSentenceBtn" style="width: auto; display: inline-block;">💌 تأكيد الجملة</button>
+                    </div>
+                    
+                    <div id="wordMsg" class="error-msg hidden"></div>
                     <div class="hint-box">
-                        💡 الإجابة: 7 × 3 = ؟
+                        💡 الجملة: "بحبك يا أجمل وأغلى حاجة في حياتي"
                     </div>
                 </div>
             </div>
@@ -246,7 +264,7 @@
                 <div class="stats-box">
                     <div class="stat-item">
                         <span class="stat-label">📸 عدد الصور</span>
-                        <span class="stat-value" id="photoCount">0</span>
+                        <span class="stat-value" id="photoCount">4</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">💕 لحظات سعيدة</span>
@@ -266,11 +284,6 @@
                 </div>
 
                 <div class="gallery" id="photoGallery"></div>
-
-                <div id="emptyGallery" class="love-text">
-                    <p>📷 لسه مفيش صور في الألبوم</p>
-                    <p>ضيفي صورنا الحلوة علشان نحفظ الذكريات 💕</p>
-                </div>
 
                 <button class="btn pulse-btn" id="continueToFinalBtn">كملي للمفاجأة الكبيرة 💖</button>
             </div>
@@ -342,16 +355,16 @@
                     <div class="surprise-content" id="surpriseContent2">
                         <div class="love-text" style="margin-top: 20px;">
                             <p>📝 10 أسباب بحبك:</p>
-                            <p>1️⃣ ابتسامتك اللي بتنور حياتي</p>
-                            <p>2️⃣ قلبك الطيب</p>
-                            <p>3️⃣ صوتك اللي بيريحني</p>
-                            <p>4️⃣ وجودك جنبي</p>
-                            <p>5️⃣ حنانك</p>
-                            <p>6️⃣ ضحكتك</p>
-                            <p>7️⃣ كل حاجة فيكي</p>
-                            <p>8️⃣ اللي أنتِ عليه</p>
-                            <p>9️⃣ أحلامك وطموحك</p>
-                            <p>🔟 لأنك أنتِ... وبس! ❤️</p>
+                            <p>1 ابتسامتك اللي بتنور حياتي</p>
+                            <p>2 قلبك الطيب</p>
+                            <p>3 صوتك اللي بيريحني</p>
+                            <p>4 وجودك جنبي</p>
+                            <p>5 حنانك</p>
+                            <p>6 ضحكتك</p>
+                            <p>7 كل حاجة فيكي</p>
+                            <p>8 اللي أنتِ عليه</p>
+                            <p>9 أحلامك وطموحك</p>
+                            <p>10 لأنك أنتِ... وبس! ❤️</p>
                         </div>
                     </div>
                 </div>

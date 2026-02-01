@@ -10,11 +10,38 @@ let photos = [];
 let musicPlaying = false;
 let gamesCompleted = 0;
 
-// تحميل الصور المحفوظة
+// متغيرات لعبة ترتيب الكلمات
+let currentSentence = [];
+const targetSentence = ["بحبك", "يا", "أجمل", "وأغلى", "حاجة", "في", "حياتي"];
+
+// الصور الافتراضية للألبوم
+const defaultPhotos = [
+    {
+        src: 'https://i.postimg.cc/90Hj5f3J/01K39A2MG2C6PGM7YQS3RX6CGN.jpg',
+        caption: 'أنتِ أجمل حاجة في حياتي ❤️'
+    },
+    {
+        src: 'https://i.postimg.cc/C5CpFVYP/01K399MW4936BB4TJPP53PHVSG.jpg',
+        caption: 'معاكي كل لحظة جميلة 💕'
+    },
+    {
+        src: 'https://i.postimg.cc/VLBzwXkF/01K399D6KJCXSGPV7TZTHSHV8T.jpg',
+        caption: 'حبيبة قلبي وروحي 💖'
+    },
+    {
+        src: 'https://i.postimg.cc/4yvRJTsR/01K111R8AHJS5G8S9ZY6V23MPX.jpg',
+        caption: 'أحلى ذكرياتي معاكي 🌹'
+    }
+];
+
+// تحميل الصور
 function loadPhotos() {
     const saved = localStorage.getItem('valentinePhotos');
     if (saved) {
         photos = JSON.parse(saved);
+    } else {
+        photos = [...defaultPhotos];
+        savePhotos();
     }
 }
 
@@ -46,15 +73,23 @@ document.getElementById('startBtn').addEventListener('click', function() {
         welcomeScreen.style.display = 'none';
     }, 500);
     
-    // تشغيل الموسيقى
-    music.volume = 0.3;
-    music.play().then(() => {
-        musicPlaying = true;
-        document.getElementById('musicIcon').textContent = '🔊';
-    }).catch(error => {
-        console.log('Music autoplay blocked:', error);
-    });
+    // تشغيل الموسيقى مع محاولات متعددة
+    music.volume = 0.4;
     
+    const playAttempt = () => {
+        music.play()
+            .then(() => {
+                musicPlaying = true;
+                document.getElementById('musicIcon').textContent = '🔊';
+                console.log('✅ الموسيقى شغالة!');
+            })
+            .catch(error => {
+                console.log('محاولة تشغيل الموسيقى...', error);
+                setTimeout(playAttempt, 1000);
+            });
+    };
+    
+    playAttempt();
     createFloatingHearts();
 });
 
@@ -67,16 +102,33 @@ document.getElementById('musicBtn').addEventListener('click', function() {
         music.pause();
         icon.textContent = '🔇';
         musicPlaying = false;
+        showCustomAlert('⏸️ الموسيقى متوقفة');
     } else {
-        music.volume = 0.3;
-        music.play().then(() => {
-            icon.textContent = '🔊';
-            musicPlaying = true;
-        }).catch(error => {
-            alert('❌ لا يمكن تشغيل الموسيقى');
-        });
+        music.volume = 0.4;
+        music.play()
+            .then(() => {
+                icon.textContent = '🔊';
+                musicPlaying = true;
+                showCustomAlert('🎵 الموسيقى شغالة!');
+            })
+            .catch(error => {
+                showCustomAlert('❌ لا يمكن تشغيل الموسيقى');
+            });
     }
 });
+
+// رسالة تنبيه مخصصة
+function showCustomAlert(message) {
+    const alert = document.createElement('div');
+    alert.className = 'custom-alert';
+    alert.textContent = message;
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        alert.style.animation = 'fadeOut 0.3s';
+        setTimeout(() => alert.remove(), 300);
+    }, 2000);
+}
 
 // بداية الرحلة
 document.getElementById('startJourneyBtn').addEventListener('click', function() {
@@ -98,6 +150,7 @@ function showPage(pageNum) {
         
         setTimeout(() => {
             if (pageNum === 3) initTreasureMap();
+            if (pageNum === 4) initWordPuzzle();
             if (pageNum === 5) initMemoryGame();
             if (pageNum === 9) displayPhotos();
         }, 100);
@@ -150,7 +203,7 @@ document.querySelectorAll('.choice-btn').forEach(btn => {
     });
 });
 
-// خريطة الكنز
+// خريطة الكنز - محدثة
 function initTreasureMap() {
     const map = document.getElementById('treasureMap');
     if (!map) return;
@@ -167,6 +220,7 @@ function initTreasureMap() {
         treasure.className = 'treasure-item';
         treasure.innerHTML = hearts.includes(index) ? '❓' : item;
         treasure.dataset.hasHeart = hearts.includes(index);
+        treasure.dataset.heartIndex = hearts.indexOf(index);
         treasure.addEventListener('click', function() {
             checkTreasure(this);
         });
@@ -188,59 +242,160 @@ function checkTreasure(element) {
         treasuresFound++;
         updateFoundCount();
         
-        const messages = [
-            '✨ لقيتي قلب! ✨\n💕 أول مرة شوفتك فيها',
-            '✨ لقيتي قلب تاني! ✨\n💑 أول مرة مسكت إيدك',
-            '✨ لقيتي آخر قلب! ✨\n❤️ يوم ما قولتلك بحبك'
-        ];
-        
-        alert(messages[treasuresFound - 1]);
+        const heartIndex = parseInt(element.dataset.heartIndex);
+        showMemoryModal(heartIndex);
         
         if (treasuresFound === 3) {
-            createConfetti();
-            updateGamesCompleted();
-            document.getElementById('treasureMsg').classList.remove('hidden');
-            document.getElementById('treasureMsg').textContent = '🎉 برافو! لقيتي كل القلوب! 🎉';
-            
             setTimeout(() => {
-                showPage(4);
-                setTimeout(() => updateProgress('progress3', 42), 100);
-            }, 2000);
+                createConfetti();
+                updateGamesCompleted();
+                showSuccessMessage();
+            }, 500);
         }
     } else {
-        alert('❌ مفيش قلب هنا... دوري في مكان تاني 💕');
+        showCustomAlert('💔 مفيش قلب هنا... دوري في مكان تاني يا حبيبتي 💕');
     }
 }
 
-// الكود السري
-const code1 = document.getElementById('code1');
-const code2 = document.getElementById('code2');
+// عرض مودال الذكريات
+function showMemoryModal(index) {
+    const modal = document.getElementById('memoryModal');
+    const title = document.getElementById('memoryTitle');
+    const text = document.getElementById('memoryText');
+    
+    const memories = [
+        {
+            title: '✨ لقيتي القلب الأول! ✨',
+            text: '💕 أول مرة شوفتك فيها\n\nاليوم ده قلبي عرف معنى الحب الحقيقي. كانت لحظة سحرية غيرت حياتي للأبد. أول ما شوفتك حسيت إني لقيت اللي كنت بدور عليه طول عمري ❤️'
+        },
+        {
+            title: '✨ لقيتي القلب الثاني! ✨',
+            text: '💑 أول مرة مسكت إيدك\n\nحسيت وقتها إني مسكت العالم كله. إيدك الصغيرة في إيدي كانت أحلى إحساس في الدنيا. ومن ساعتها مش عايز أسيب إيدك أبداً 💕'
+        },
+        {
+            title: '✨ لقيتي القلب الأخير! ✨',
+            text: '❤️ يوم ما قولتلك بحبك\n\nأجمل يوم في حياتي. قلبي كان بيدق بسرعة وأنا بقول الكلمة دي. وأنتِ قولتيلي بحبك كمان، وساعتها حسيت إني أسعد إنسان في الدنيا. الحب ده هيفضل للأبد يا قلبي 💖'
+        }
+    ];
+    
+    const memory = memories[index];
+    title.textContent = memory.title;
+    text.innerHTML = memory.text.replace(/\n/g, '<br>');
+    
+    modal.style.display = 'block';
+    createConfetti();
+}
 
-code1.addEventListener('input', function() {
-    if (this.value.length >= 1) {
-        code2.focus();
-    }
+// إغلاق مودال الذكريات
+document.getElementById('closeMemoryBtn').addEventListener('click', function() {
+    document.getElementById('memoryModal').style.display = 'none';
 });
 
-document.getElementById('checkCodeBtn').addEventListener('click', function() {
-    const enteredCode = code1.value + code2.value;
-    const msg = document.getElementById('codeMsg');
+// رسالة النجاح
+function showSuccessMessage() {
+    const msg = document.getElementById('treasureMsg');
+    msg.classList.remove('hidden');
+    msg.textContent = 'برافو يا حبيبتي! لقيتي كل القلوب! 🎉';
     
-    if (enteredCode === '21') {
-        msg.classList.add('hidden');
+    setTimeout(() => {
+        showPage(4);
+        setTimeout(() => updateProgress('progress3', 42), 100);
+    }, 2500);
+}
+
+// ------------------------------------------------------------
+// لعبة ترتيب الكلمات (الجديدة)
+// ------------------------------------------------------------
+function initWordPuzzle() {
+    const bank = document.getElementById('wordsBank');
+    const area = document.getElementById('sentenceArea');
+    const msg = document.getElementById('wordMsg');
+    
+    if (!bank || !area) return;
+    
+    // إعادة تعيين الحالة
+    currentSentence = [];
+    bank.innerHTML = '';
+    area.innerHTML = '<span class="placeholder-text">اضغطي على الكلمات بالترتيب...</span>';
+    area.classList.remove('correct');
+    msg.classList.add('hidden');
+    msg.textContent = '';
+    
+    // خلط الكلمات
+    const shuffled = [...targetSentence].sort(() => Math.random() - 0.5);
+    
+    shuffled.forEach(word => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.textContent = word;
+        chip.onclick = () => selectWord(chip, word);
+        bank.appendChild(chip);
+    });
+}
+
+function selectWord(chip, word) {
+    if (chip.classList.contains('used')) return;
+    
+    const area = document.getElementById('sentenceArea');
+    
+    // إزالة النص الافتراضي عند أول اختيار
+    if (currentSentence.length === 0) {
+        area.innerHTML = '';
+    }
+    
+    currentSentence.push(word);
+    chip.classList.add('used');
+    
+    // إضافة الكلمة لمنطقة الجملة
+    const selectedChip = document.createElement('div');
+    selectedChip.className = 'word-chip';
+    selectedChip.textContent = word;
+    selectedChip.onclick = () => {
+        // إزالة الكلمة عند الضغط عليها في منطقة الجملة
+        selectedChip.remove();
+        currentSentence = currentSentence.filter(w => w !== word);
+        chip.classList.remove('used'); // إعادة تفعيل الكلمة في البنك
+        
+        if (currentSentence.length === 0) {
+            area.innerHTML = '<span class="placeholder-text">اضغطي على الكلمات بالترتيب...</span>';
+        }
+    };
+    
+    area.appendChild(selectedChip);
+}
+
+document.getElementById('resetWordsBtn').addEventListener('click', initWordPuzzle);
+
+document.getElementById('checkSentenceBtn').addEventListener('click', function() {
+    const msg = document.getElementById('wordMsg');
+    const area = document.getElementById('sentenceArea');
+    
+    // تحويل المصفوفات لنصوص للمقارنة
+    const currentStr = currentSentence.join(' ');
+    const targetStr = targetSentence.join(' ');
+    
+    if (currentStr === targetStr) {
+        msg.classList.remove('hidden', 'error-msg');
+        msg.classList.add('success-msg');
+        msg.textContent = '✅ صح يا روحي! وأنا كمان بحبك أوي 💕';
+        area.classList.add('correct');
+        
         createConfetti();
         updateGamesCompleted();
-        alert('✅ برافو يا حبيبتي! الكود صح 💖');
         
         setTimeout(() => {
             showPage(5);
             setTimeout(() => updateProgress('progress4', 56), 100);
-        }, 1000);
-    } else if (enteredCode.length === 2) {
+        }, 2000);
+    } else {
         msg.classList.remove('hidden');
-        msg.textContent = '❌ الكود غلط يا حبيبتي! حاولي تاني 💕';
+        msg.classList.add('error-msg');
+        msg.textContent = '❌ الجملة مش مرتبة صح يا قلبي! حاولي تاني 💕';
+        area.classList.add('shake');
+        setTimeout(() => area.classList.remove('shake'), 500);
     }
 });
+
 
 // لعبة الذاكرة
 function initMemoryGame() {
@@ -345,7 +500,7 @@ document.getElementById('loveCounter').addEventListener('click', function() {
             updateGamesCompleted();
             
             setTimeout(() => {
-                alert('💖 كملتي 20 ضغطة! يلا للمحطة الجاية 💖');
+                showCustomAlert('💖 كملتي 20 ضغطة! يلا للمحطة الجاية يا قلبي 💖');
                 showPage(7);
                 setTimeout(() => updateProgress('progress6', 84), 100);
             }, 1000);
@@ -411,14 +566,21 @@ document.getElementById('openAlbumBtn').addEventListener('click', function() {
 
 // معالجة الصور
 const romanticCaptions = [
-    "أنتِ أجمل حاجة في حياتي ❤️", "معاكي كل لحظة جميلة 💕",
-    "حبيبة قلبي وروحي 💖", "أحلى ذكرياتي معاكي 🌹",
-    "أنتِ نور عيني 💝", "مستقبلي وأملي 👰",
-    "قلبي كله ليكي 💗", "أميرتي الجميلة 👑",
-    "حياتي كلها أنتِ 💓", "بحبك لآخر نفس 💞",
-    "أجمل إحساس 💘", "ملاكي الحارس 😇",
-    "زي القمر في السما 🌙", "وردتي الجميلة 🌺",
-    "حلم حياتي 💫", "أحلى ذكرى 📸"
+    "أنتِ نور عيني 💝",
+    "مستقبلي وأملي 👰",
+    "قلبي كله ليكي 💗",
+    "أميرتي الجميلة 👑",
+    "حياتي كلها أنتِ 💓",
+    "بحبك لآخر نفس 💞",
+    "أجمل إحساس 💘",
+    "ملاكي الحارس 😇",
+    "زي القمر في السما 🌙",
+    "وردتي الجميلة 🌺",
+    "حلم حياتي 💫",
+    "أحلى ذكرى 📸",
+    "معاكي كل حاجة حلوة 🌹",
+    "يا أغلى حبيبة ❤️",
+    "للأبد معاكي 💕"
 ];
 
 document.getElementById('photoUpload').addEventListener('change', function(event) {
@@ -440,45 +602,39 @@ document.getElementById('photoUpload').addEventListener('change', function(event
 
 function displayPhotos() {
     const gallery = document.getElementById('photoGallery');
-    const empty = document.getElementById('emptyGallery');
     const countEl = document.getElementById('photoCount');
     
     if (!gallery) return;
     
     gallery.innerHTML = '';
     
-    if (photos.length === 0) {
-        empty.style.display = 'block';
-    } else {
-        empty.style.display = 'none';
-        photos.forEach((photo, index) => {
-            const card = document.createElement('div');
-            card.className = 'photo-card';
-            card.innerHTML = `
-                <img src="${photo.src}" alt="صورة ${index + 1}">
-                <div class="photo-caption">${photo.caption}</div>
-                <button class="delete-photo">×</button>
-            `;
-            
-            // فتح الصورة
-            card.querySelector('img').addEventListener('click', function() {
-                document.getElementById('modalImage').src = photo.src;
-                document.getElementById('imageModal').style.display = 'block';
-            });
-            
-            // حذف الصورة
-            card.querySelector('.delete-photo').addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (confirm('🗑️ متأكدة تحذفي الصورة دي؟')) {
-                    photos.splice(index, 1);
-                    savePhotos();
-                    displayPhotos();
-                }
-            });
-            
-            gallery.appendChild(card);
+    photos.forEach((photo, index) => {
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+        card.innerHTML = `
+            <img src="${photo.src}" alt="صورة ${index + 1}">
+            <div class="photo-caption">${photo.caption}</div>
+            <button class="delete-photo">×</button>
+        `;
+        
+        // فتح الصورة
+        card.querySelector('img').addEventListener('click', function() {
+            document.getElementById('modalImage').src = photo.src;
+            document.getElementById('imageModal').style.display = 'block';
         });
-    }
+        
+        // حذف الصورة
+        card.querySelector('.delete-photo').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (confirm('🗑️ متأكدة تحذفي الصورة دي يا قلبي؟')) {
+                photos.splice(index, 1);
+                savePhotos();
+                displayPhotos();
+            }
+        });
+        
+        gallery.appendChild(card);
+    });
     
     if (countEl) countEl.textContent = photos.length;
 }
@@ -496,6 +652,11 @@ window.addEventListener('click', function(event) {
     const modal = document.getElementById('imageModal');
     if (event.target === modal) {
         modal.style.display = 'none';
+    }
+    
+    const memoryModal = document.getElementById('memoryModal');
+    if (event.target === memoryModal) {
+        memoryModal.style.display = 'none';
     }
 });
 
@@ -526,7 +687,7 @@ document.getElementById('backToAlbumBtn').addEventListener('click', function() {
 });
 
 document.getElementById('restartBtn').addEventListener('click', function() {
-    if (confirm('🔄 هتبدأي الرحلة من الأول؟\n\nكل الذكريات والصور هتفضل محفوظة 💕')) {
+    if (confirm('🔄 هتبدأي الرحلة من الأول يا حبيبتي؟\n\nكل الذكريات والصور هتفضل محفوظة 💕')) {
         loveCount = 0;
         treasuresFound = 0;
         matchedPairs = 0;
@@ -550,10 +711,13 @@ function createConfetti() {
         confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
         confetti.style.borderRadius = '50%';
         confetti.style.zIndex = '9999';
-        confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+        confetti.style.pointerEvents = 'none';
+        
+        const duration = Math.random() * 3 + 2;
+        confetti.style.animation = `confettiFall ${duration}s linear forwards`;
         
         document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 5000);
+        setTimeout(() => confetti.remove(), duration * 1000);
     }
 }
 
@@ -590,3 +754,8 @@ function createHeart() {
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 3000);
 }
+
+// تحميل الصور عند فتح الصفحة
+window.addEventListener('load', function() {
+    displayPhotos();
+});
