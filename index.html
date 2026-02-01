@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️ رحلة الحب - هدية عيد الحب 2026 ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- شاشة البداية -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <div class="big-heart">❤️</div>
+            <h1 class="welcome-title">مرحباً يا حبيبتي 💕</h1>
+            <p class="welcome-text">اضغطي على الزرار علشان تبدأي رحلة الحب مع الموسيقى 🎵</p>
+            <button class="start-btn" id="startBtn">🎵 ابدأي الرحلة 💖</button>
+        </div>
+    </div>
+
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- مشغل الموسيقى -->
+    <audio id="bgMusic" loop>
+        <source src="https://files.catbox.moe/ee9agb.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-control" id="musicBtn">
+        <span id="musicIcon">🔊</span>
+    </button>
+
+    <!-- Modal للصور -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal" id="closeModalBtn">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="صورة">
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- صفحة 1: الترحيب -->
+        <div id="page1">
+            <div class="heart"></div>
+            <h1>❤️ رحلة الحب ❤️</h1>
+            <div class="date-box">
+                📅 الجمعة 14 فبراير 2026 📅<br>
+                عيد حب خاص لأغلى إنسانة في حياتي
+            </div>
+
+            <div class="love-text">
+                <p>💕 حبيبتي الغالية 💕</p>
+                <p>جهزتلك مفاجأة كبيرة</p>
+                <p>بس لازم تعدي رحلة مليانة حب علشان توصليلها</p>
+                <p>كل خطوة هتكتشفي فيها قد إيه بحبك</p>
+            </div>
+
+            <div class="romantic-quotes">
+                "الحب مش كلمة بتتقال... الحب رحلة بنعيشها سوا ❤️"
+            </div>
+
+            <div class="stats-mini">
+                <div class="stat-mini">
+                    <span>🎮 الألعاب المكتملة</span>
+                    <span class="stat-number" id="gamesCompleted">0/7</span>
+                </div>
+            </div>
+
+            <button class="btn pulse-btn" id="startJourneyBtn">يلا نبدأ رحلة الحب 💝</button>
+        </div>
+
+        <!-- صفحة 2: اللغز الأول -->
+        <div id="page2" class="hidden">
+            <div class="gift-content">
+                <h2>🎯 المحطة الأولى: لغز الحب 🎯</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress1">14%</div>
+                </div>
+                <div class="puzzle-box">
+                    <div class="riddle-text">
+                        حاجة تدق بسرعة لما أشوفك<br>
+                        وتوقف لو بعدتي عني<br>
+                        إيه هي؟ 💓
+                    </div>
+                    <div class="choices">
+                        <button class="choice-btn" data-answer="wrong">عقلي 🧠</button>
+                        <button class="choice-btn" data-answer="correct">قلبي ❤️</button>
+                        <button class="choice-btn" data-answer="wrong">ساعتي ⌚</button>
+                        <button class="choice-btn" data-answer="wrong">تليفوني 📱</button>
+                    </div>
+                    <div class="hint-box">
+                        💡 تلميح: دي أول كلمة قولتهالك لما حبيتك
+                    </div>
+                    <div id="riddleMsg" class="error-msg hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحة 3: خريطة الكنز -->
+        <div id="page3" class="hidden">
+            <div class="gift-content">
+                <h2>🗺️ المحطة الثانية: خريطة ذكرياتنا 🗺️</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress2">28%</div>
+                </div>
+                <div class="love-text">
+                    <p>دوري على 3 قلوب مخفية في الخريطة</p>
+                    <p>كل قلب فيه ذكرى جميلة بينا 💕</p>
+                    <p id="foundCount">لقيتي: 0/3 💖</p>
+                </div>
+                <div class="treasure-map" id="treasureMap"></div>
+                <div id="treasureMsg" class="success-msg hidden"></div>
+            </div>
+        </div>
+
+        <!-- صفحة 4: الكود السري -->
+        <div id="page4" class="hidden">
+            <div class="gift-content">
+                <h2>🔐 المحطة الثالثة: الكود السري 🔐</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress3">42%</div>
+                </div>
+                <div class="puzzle-box">
+                    <div class="riddle-text">
+                        أدخلي الكود السري:<br>
+                        "عدد أيام الأسبوع ✖️ 3"
+                    </div>
+                    <div class="secret-code">
+                        <input type="number" class="code-input" id="code1" maxlength="1" max="9">
+                        <input type="number" class="code-input" id="code2" maxlength="1" max="9">
+                    </div>
+                    <button class="btn" id="checkCodeBtn">تحقق من الكود 🔓</button>
+                    <div id="codeMsg" class="error-msg hidden"></div>
+                    <div class="hint-box">
+                        💡 الإجابة: 7 × 3 = ؟
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحة 5: لعبة الذاكرة -->
+        <div id="page5" class="hidden">
+            <div class="gift-content">
+                <h2>🎴 المحطة الرابعة: لعبة الذكريات 🎴</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress4">56%</div>
+                </div>
+                <div class="love-text">
+                    <p>لاقي الأزواج المتطابقة من رموز الحب 💕</p>
+                    <p id="matchCount">أزواج: 0/8 💖</p>
+                </div>
+                <div class="memory-game" id="memoryGame"></div>
+                <div id="memoryMsg" class="success-msg hidden"></div>
+            </div>
+        </div>
+
+        <!-- صفحة 6: عداد الحب -->
+        <div id="page6" class="hidden">
+            <div class="gift-content">
+                <h2>💗 المحطة الخامسة: عداد الحب 💗</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress5">70%</div>
+                </div>
+                <div class="love-text">
+                    <p>اضغطي على القلب 20 مرة</p>
+                    <p>كل ضغطة = "بحبك" ❤️</p>
+                </div>
+                <div class="love-counter" id="loveCounter">
+                    <span id="loveCount">0</span> / 20 ❤️
+                </div>
+                <div class="romantic-quotes" id="loveQuote">اضغطي على القلب 💕</div>
+            </div>
+        </div>
+
+        <!-- صفحة 7: مقياس الحب -->
+        <div id="page7" class="hidden">
+            <div class="gift-content">
+                <h2>💖 المحطة السادسة: مقياس الحب 💖</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress6">84%</div>
+                </div>
+
+                <div class="love-percentage">
+                    <h3>💘 نسبة الحب بينا 💘</h3>
+                    <div class="love-text">
+                        <p>اضغطي على الزرار علشان تشوفي نسبة حبنا 💕</p>
+                    </div>
+                    <button class="btn" id="calculateLoveBtn">🔮 احسبي نسبة الحب</button>
+                    <div class="percentage-meter">
+                        <div class="percentage-fill" id="loveMeter">0%</div>
+                    </div>
+                    <div id="loveResult" class="romantic-quotes hidden"></div>
+                </div>
+
+                <button id="continueBtn7" class="btn btn-secondary hidden">كملي للمحطة الجاية 💝</button>
+            </div>
+        </div>
+
+        <!-- صفحة 8: قفل ألبوم الصور -->
+        <div id="page8" class="hidden">
+            <div class="gift-content">
+                <h2>📸 المحطة السابعة: ألبوم الذكريات 📸</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress7">92%</div>
+                </div>
+                
+                <div class="album-lock">
+                    <div class="album-icon">🔒📖</div>
+                    <h3>ألبوم الذكريات السري</h3>
+                    <div class="love-text">
+                        <p>هنا كل صورنا الحلوة مع بعض 💕</p>
+                        <p>بس محتاج باسورد علشان تفتحيه</p>
+                    </div>
+                    
+                    <div class="album-preview">
+                        <div class="preview-box">📷</div>
+                        <div class="preview-box">❤️</div>
+                        <div class="preview-box">💑</div>
+                        <div class="preview-box">💕</div>
+                        <div class="preview-box">🌹</div>
+                        <div class="preview-box">💖</div>
+                    </div>
+
+                    <div class="password-section">
+                        <input type="password" id="albumPassword" placeholder="🔐 باسورد الألبوم السري">
+                        <button class="btn" id="openAlbumBtn">افتحي الألبوم يا قلبي 💝</button>
+                        <div id="albumMsg" class="error-msg hidden"></div>
+                        <div class="hint-box">
+                            💡 الباسورد: "ذكرياتنا" + السنة (2026)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحة 9: ألبوم الصور -->
+        <div id="page9" class="hidden">
+            <div class="gift-content">
+                <h2>📷 ألبوم ذكرياتنا الحلوة 📷</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%">100% ❤️</div>
+                </div>
+
+                <div class="romantic-quotes">
+                    "كل صورة هنا فيها قصة حب... وكل قصة فيها أنتِ 💕"
+                </div>
+
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <span class="stat-label">📸 عدد الصور</span>
+                        <span class="stat-value" id="photoCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">💕 لحظات سعيدة</span>
+                        <span class="stat-value">∞</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">❤️ مستوى الحب</span>
+                        <span class="stat-value">100%</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <label for="photoUpload" class="btn btn-secondary" style="display: inline-block; width: auto; padding: 15px 30px; cursor: pointer;">
+                        📸 ضيفي صور جديدة 💝
+                    </label>
+                    <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
+                </div>
+
+                <div class="gallery" id="photoGallery"></div>
+
+                <div id="emptyGallery" class="love-text">
+                    <p>📷 لسه مفيش صور في الألبوم</p>
+                    <p>ضيفي صورنا الحلوة علشان نحفظ الذكريات 💕</p>
+                </div>
+
+                <button class="btn pulse-btn" id="continueToFinalBtn">كملي للمفاجأة الكبيرة 💖</button>
+            </div>
+        </div>
+
+        <!-- صفحة 10: الهدية النهائية -->
+        <div id="page10" class="hidden">
+            <div class="gift-content">
+                <div class="heart"></div>
+                <h1>🎊 مبروك يا قلبي! 🎊</h1>
+                
+                <div class="celebration-animation">
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                </div>
+
+                <div class="romantic-quotes">
+                    "وصلتي للنهاية... بس دي مش نهاية، دي بداية حياتنا سوا للأبد 💍"
+                </div>
+
+                <div class="love-letter">
+                    <div class="letter-content">
+                        <p>إلى حبيبة قلبي وروحي...</p>
+                        <br>
+                        <p>من أول يوم شوفتك فيه، حياتي اتغيرت للأحسن. أنتِ نور عيني ونبض قلبي. معاكي اكتشفت معنى الحب الحقيقي، ومعنى السعادة الحقيقية.</p>
+                        <br>
+                        <p>كل لحظة معاكي هي هدية من ربنا. كل ضحكة منك بتنور يومي. كل كلمة منك بتملا قلبي فرحة.</p>
+                        <br>
+                        <p>وعد مني ليكي: هفضل أحبك كل يوم أكتر من اللي قبله. هفضل جنبك في الفرح والحزن. هفضل أحميكي وأسعدك للأبد.</p>
+                        <br>
+                        <p>أنتِ مش بس حبيبتي... أنتِ حياتي كلها، مستقبلي، وأملي الوحيد.</p>
+                        <br>
+                        <p style="text-align: center; font-weight: bold; color: #e91e63;">بحبك يا أجمل حاجة في حياتي ❤️</p>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">💕 أول يوم شوفتك</div>
+                        <p>اليوم ده قلبي عرف معنى الحب الحقيقي</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">💑 أول مرة قولتلك بحبك</div>
+                        <p>كانت أجمل لحظة في حياتي</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">💍 يوم الخطوبة</div>
+                        <p>اليوم اللي ربطني بيكي للأبد</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">❤️ كل يوم جاي</div>
+                        <p>حياتنا سوا... مستقبلنا... أحلامنا... كل حاجة</p>
+                    </div>
+                </div>
+
+                <div class="surprise-box" data-surprise="1">
+                    <h3>🎁 مفاجأة 1: وعد مني ليكي 🎁</h3>
+                    <div class="surprise-content" id="surpriseContent1">
+                        <div class="romantic-quotes" style="margin-top: 20px;">
+                            "وعد مني ليكي: هفضل أحبك كل يوم أكتر من اللي قبله ❤️<br>
+                            وهفضل جنبك في كل لحظة، في الفرح والحزن، للأبد 💍"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surprise-box" data-surprise="2">
+                    <h3>💝 مفاجأة 2: 10 أسباب بحبك 💝</h3>
+                    <div class="surprise-content" id="surpriseContent2">
+                        <div class="love-text" style="margin-top: 20px;">
+                            <p>📝 10 أسباب بحبك:</p>
+                            <p>1️⃣ ابتسامتك اللي بتنور حياتي</p>
+                            <p>2️⃣ قلبك الطيب</p>
+                            <p>3️⃣ صوتك اللي بيريحني</p>
+                            <p>4️⃣ وجودك جنبي</p>
+                            <p>5️⃣ حنانك</p>
+                            <p>6️⃣ ضحكتك</p>
+                            <p>7️⃣ كل حاجة فيكي</p>
+                            <p>8️⃣ اللي أنتِ عليه</p>
+                            <p>9️⃣ أحلامك وطموحك</p>
+                            <p>🔟 لأنك أنتِ... وبس! ❤️</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surprise-box" data-surprise="3">
+                    <h3>🌹 مفاجأة 3: خططنا للمستقبل 🌹</h3>
+                    <div class="surprise-content" id="surpriseContent3">
+                        <div class="romantic-quotes" style="margin-top: 20px;">
+                            "خططي للمستقبل:<br>
+                            🏠 بيتنا الصغير<br>
+                            👶 أولادنا<br>
+                            🌍 سفرياتنا<br>
+                            💑 حياتنا السعيدة<br>
+                            كل ده معاكي يا حبيبتي"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surprise-box" data-surprise="4">
+                    <h3>💌 مفاجأة 4: رسالة من القلب 💌</h3>
+                    <div class="surprise-content" id="surpriseContent4">
+                        <div class="romantic-quotes" style="margin-top: 20px;">
+                            "يا أجمل إحساس في حياتي 💕<br>
+                            كل يوم معاكي هو يوم جديد من السعادة<br>
+                            أنتِ السبب في كل ابتسامة على وجهي<br>
+                            بحبك للأبد يا روحي ❤️"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="surprise-box" data-surprise="5">
+                    <h3>🎵 مفاجأة 5: ذكريات جميلة 🎵</h3>
+                    <div class="surprise-content" id="surpriseContent5">
+                        <div class="romantic-quotes" style="margin-top: 20px;">
+                            "كل لحظة معاكي ذكرى محفورة في قلبي 💕<br>
+                            كل صورة، كل أغنية، كل مكان...<br>
+                            كل حاجة بتفكرني بيكي يا حبيبتي 🌹"
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" id="backToAlbumBtn">
+                    📸 ارجعي للألبوم
+                </button>
+
+                <button class="btn pulse-btn" id="restartBtn">
+                    🔄 ابدأي الرحلة من الأول
+                </button>
+
+                <div class="romantic-quotes final-message">
+                    "كل سنة وأنتِ حبيبتي وخطيبتي ومراتي المستقبلية<br>
+                    بحبك يا أجمل حاجة في حياتي ❤️❤️❤️<br>
+                    <strong style="font-size: 1.3em;">Happy Valentine's Day 2026 💝</strong>"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
