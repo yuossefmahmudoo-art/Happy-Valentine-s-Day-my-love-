@@ -53,7 +53,7 @@
             <h1>❤️ بحبك يا منتي❤️</h1>
             <div class="date-box">
                 📅 الجمعة 14 فبراير 2026 📅<br>
-                عيد حب خاص لأغلى إنسانة في حياتي
+                كل عيد حب وانتي حبيبت قلبي و روحي ❤💍
             </div>
 
             <div class="love-text">
@@ -64,23 +64,23 @@
             </div>
 
             <div class="romantic-quotes">
-                "الحب مش كلمة بتتقال... الحب رحلة بنعيشها سوا ❤️"
+                الحب مش كلمة بتتقال... الحب رحلة بنعيشها سوا ❤️
             </div>
 
             <div class="stats-mini">
                 <div class="stat-mini">
-                    <span>🎮 الألعاب المكتملة</span>
+                    <span>🎮 يلا نلعب يا قلبي </span>
                     <span class="stat-number" id="gamesCompleted">0/7</span>
                 </div>
             </div>
 
-            <button class="btn pulse-btn" id="startJourneyBtn">يلا نبدأ رحلة الحب 💝</button>
+            <button class="btn pulse-btn" id="startJourneyBtn">يلا نبدأ يا منتي 💝</button>
         </div>
 
         <!-- صفحة 2: اللغز الأول -->
         <div id="page2" class="hidden">
             <div class="gift-content">
-                <h2>🎯 المحطة الأولى: لغز الحب 🎯</h2>
+                <h2>🎯 اول لغز يا منتي 🎯</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress1">14%</div>
                 </div>
@@ -107,7 +107,7 @@
         <!-- صفحة 3: خريطة الكنز -->
         <div id="page3" class="hidden">
             <div class="gift-content">
-                <h2>🗺️ المحطة الثانية: خريطة ذكرياتنا 🗺️</h2>
+                <h2>💍 تاني لغز يا منون ❤</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress2">28%</div>
                 </div>
@@ -121,10 +121,10 @@
             </div>
         </div>
 
-        <!-- صفحة 4: لعبة كلمات الحب (تم استبدال الكود السري) -->
+        <!-- صفحة 4: لعبة كلمات الحب -->
         <div id="page4" class="hidden">
             <div class="gift-content">
-                <h2>💌 المحطة الثالثة: كلمات من القلب 💌</h2>
+                <h2>💌 لغز اتالت يا منتي 💌</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress3">42%</div>
                 </div>
@@ -142,29 +142,41 @@
                     <div class="words-bank" id="wordsBank"></div>
 
                     <div class="control-btns">
-                        <button class="btn btn-secondary" id="resetWordsBtn" style="width: auto; display: inline-block;">🔄 إعادة ترتيب</button>
-                        <button class="btn pulse-btn" id="checkSentenceBtn" style="width: auto; display: inline-block;">💌 تأكيد الجملة</button>
+                        <button class="btn btn-secondary" id="resetWordsBtn" style="width: auto; display: inline-block;">🔄شك مش عرفه 😑</button>
+                        <button class="btn pulse-btn" id="checkSentenceBtn" style="width: auto; display: inline-block;">💌 هاا يا منتي </button>
                     </div>
                     
                     <div id="wordMsg" class="error-msg hidden"></div>
                     <div class="hint-box">
-                        💡 الجملة: "بحبك يا أجمل وأغلى حاجة في حياتي"
+                        💡 يلا بقا يا منتي وريني 😂
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- صفحة 5: لعبة الذاكرة -->
+        <!-- صفحة 5: لعبة الذاكرة المطورة -->
         <div id="page5" class="hidden">
             <div class="gift-content">
-                <h2>🎴 المحطة الرابعة: لعبة الذكريات 🎴</h2>
+                <h2>🎴 لغز ارابع يا منون 🎴</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress4">56%</div>
                 </div>
                 <div class="love-text">
-                    <p>لاقي الأزواج المتطابقة من رموز الحب 💕</p>
-                    <p id="matchCount">أزواج: 0/8 💖</p>
+                    <p>اختبار لقوة ملاحظتك يا حبيبتي! 😉</p>
+                    <p>هعرضلك صور بتعبر عن حبنا لمدة <strong>3 ثواني</strong>، احفظي أماكنهم واجمعي كل صورتين زي بعض! 💕</p>
                 </div>
+                
+                <div class="game-controls">
+                    <button id="startMemoryBtn" class="btn pulse-btn">👀دوسي هنا يا منتي و العبي</button>
+                </div>
+
+                <div class="stats-mini hidden" id="memoryStats">
+                    <div class="stat-mini">
+                        <span>أزواج مكتشفة: <span id="matchCount">0/6</span></span>
+                        <span>حركات: <span id="movesCount">0</span></span>
+                    </div>
+                </div>
+
                 <div class="memory-game" id="memoryGame"></div>
                 <div id="memoryMsg" class="success-msg hidden"></div>
             </div>
@@ -173,12 +185,12 @@
         <!-- صفحة 6: عداد الحب -->
         <div id="page6" class="hidden">
             <div class="gift-content">
-                <h2>💗 المحطة الخامسة: عداد الحب 💗</h2>
+                <h2>💗 شوفي يا منتي عداد الحب 💗</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress5">70%</div>
                 </div>
                 <div class="love-text">
-                    <p>اضغطي على القلب 20 مرة</p>
+                    <p>اضغطي على القلب 20 مرة يا منتي</p>
                     <p>كل ضغطة = "بحبك" ❤️</p>
                 </div>
                 <div class="love-counter" id="loveCounter">
@@ -191,7 +203,7 @@
         <!-- صفحة 7: مقياس الحب -->
         <div id="page7" class="hidden">
             <div class="gift-content">
-                <h2>💖 المحطة السادسة: مقياس الحب 💖</h2>
+                <h2>💖شوفي يا منتي  💖</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress6">84%</div>
                 </div>
@@ -208,14 +220,14 @@
                     <div id="loveResult" class="romantic-quotes hidden"></div>
                 </div>
 
-                <button id="continueBtn7" class="btn btn-secondary hidden">كملي للمحطة الجاية 💝</button>
+                <button id="continueBtn7" class="btn btn-secondary hidden">كملي يا منتي  💝</button>
             </div>
         </div>
 
         <!-- صفحة 8: قفل ألبوم الصور -->
         <div id="page8" class="hidden">
             <div class="gift-content">
-                <h2>📸 المحطة السابعة: ألبوم الذكريات 📸</h2>
+                <h2>📸 ألبوم الذكريات 📸</h2>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress7">92%</div>
                 </div>
@@ -239,10 +251,10 @@
 
                     <div class="password-section">
                         <input type="password" id="albumPassword" placeholder="🔐 باسورد الألبوم السري">
-                        <button class="btn" id="openAlbumBtn">افتحي الألبوم يا قلبي 💝</button>
+                        <button class="btn" id="openAlbumBtn">افتحي يا منتي يلا 💍❤</button>
                         <div id="albumMsg" class="error-msg hidden"></div>
                         <div class="hint-box">
-                            💡 الباسورد: "ذكرياتنا" + السنة (2026)
+                            💡بصي هوا تريخ ماشي 🤔
                         </div>
                     </div>
                 </div>
@@ -258,7 +270,7 @@
                 </div>
 
                 <div class="romantic-quotes">
-                    "كل صورة هنا فيها قصة حب... وكل قصة فيها أنتِ 💕"
+                    "كل صورة هنا فيها قصة حب... وكل قصة فيها انتي 💕"
                 </div>
 
                 <div class="stats-box">
@@ -278,7 +290,7 @@
 
                 <div style="text-align: center; margin: 20px 0;">
                     <label for="photoUpload" class="btn btn-secondary" style="display: inline-block; width: auto; padding: 15px 30px; cursor: pointer;">
-                        📸 ضيفي صور جديدة 💝
+                        📸 بحبك يا قلبو 💝
                     </label>
                     <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
                 </div>
@@ -293,7 +305,7 @@
         <div id="page10" class="hidden">
             <div class="gift-content">
                 <div class="heart"></div>
-                <h1>🎊 مبروك يا قلبي! 🎊</h1>
+                <h1>🎊 قلبي الا وصلت لحد هنا! 🎊</h1>
                 
                 <div class="celebration-animation">
                     <div class="firework"></div>
@@ -307,15 +319,15 @@
 
                 <div class="love-letter">
                     <div class="letter-content">
-                        <p>إلى حبيبة قلبي وروحي...</p>
+                        <p>الى حبيبت قلبي و روحي منتي </p>
                         <br>
-                        <p>من أول يوم شوفتك فيه، حياتي اتغيرت للأحسن. أنتِ نور عيني ونبض قلبي. معاكي اكتشفت معنى الحب الحقيقي، ومعنى السعادة الحقيقية.</p>
+                        <p>من أول يوم شوفتك فيه، حياتي اتغيرت للأحسن. انتي نور عيني ونبض قلبي. معاكي اكتشفت معنى الحب الحقيقي، ومعنى السعادة الحقيقية.</p>
                         <br>
                         <p>كل لحظة معاكي هي هدية من ربنا. كل ضحكة منك بتنور يومي. كل كلمة منك بتملا قلبي فرحة.</p>
                         <br>
                         <p>وعد مني ليكي: هفضل أحبك كل يوم أكتر من اللي قبله. هفضل جنبك في الفرح والحزن. هفضل أحميكي وأسعدك للأبد.</p>
                         <br>
-                        <p>أنتِ مش بس حبيبتي... أنتِ حياتي كلها، مستقبلي، وأملي الوحيد.</p>
+                        <p>انتي مش بس حبيبتي... انتي حياتي كلها، مستقبلي، وأملي الوحيد.</p>
                         <br>
                         <p style="text-align: center; font-weight: bold; color: #e91e63;">بحبك يا أجمل حاجة في حياتي ❤️</p>
                     </div>
@@ -362,9 +374,9 @@
                             <p>5 حنانك</p>
                             <p>6 ضحكتك</p>
                             <p>7 كل حاجة فيكي</p>
-                            <p>8 اللي أنتِ عليه</p>
+                            <p>8 اللي انتي عليه</p>
                             <p>9 أحلامك وطموحك</p>
-                            <p>10 لأنك أنتِ... وبس! ❤️</p>
+                            <p>10 لأنك انتي... وبس! ❤️</p>
                         </div>
                     </div>
                 </div>
@@ -376,7 +388,7 @@
                             "خططي للمستقبل:<br>
                             🏠 بيتنا الصغير<br>
                             👶 أولادنا<br>
-                            🌍 سفرياتنا<br>
+                            🌍 نفضل معا بعضديما<br>
                             💑 حياتنا السعيدة<br>
                             كل ده معاكي يا حبيبتي"
                         </div>
@@ -389,7 +401,7 @@
                         <div class="romantic-quotes" style="margin-top: 20px;">
                             "يا أجمل إحساس في حياتي 💕<br>
                             كل يوم معاكي هو يوم جديد من السعادة<br>
-                            أنتِ السبب في كل ابتسامة على وجهي<br>
+                           انتي السبب في كل ابتسامة على وجهي<br>
                             بحبك للأبد يا روحي ❤️"
                         </div>
                     </div>
@@ -415,7 +427,7 @@
                 </button>
 
                 <div class="romantic-quotes final-message">
-                    "كل سنة وأنتِ حبيبتي وخطيبتي ومراتي المستقبلية<br>
+                    "كل سنة وانتي حبيبتي وخطيبتي ومراتي المستقبلية<br>
                     بحبك يا أجمل حاجة في حياتي ❤️❤️❤️<br>
                     <strong style="font-size: 1.3em;">Happy Valentine's Day 2026 💝</strong>"
                 </div>

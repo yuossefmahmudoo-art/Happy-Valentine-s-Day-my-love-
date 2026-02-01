@@ -618,62 +618,71 @@ h3 {
     50% { transform: scale(1.1); }
 }
 
+/* تحديث ستايل لعبة الذاكرة */
 .memory-game {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin: 25px 0;
+    perspective: 1000px;
 }
 
 .memory-card {
     aspect-ratio: 1;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: transparent;
     border-radius: 10px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2em;
-    transition: all 0.3s;
     position: relative;
-}
-
-.memory-card:hover {
-    transform: scale(1.05);
-}
-
-.memory-card .card-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    color: white;
-    font-size: 2em;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card .card-face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.memory-card .front-face {
     background: white;
-    border: 3px solid #e91e63;
-    animation: flipCard 0.6s;
+    transform: rotateY(180deg);
+    padding: 5px;
+    border: 2px solid #e91e63;
 }
 
-@keyframes flipCard {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(360deg); }
+.memory-card .front-face img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
-.memory-card.matched {
-    background: #c8e6c9;
-    border: 3px solid #4caf50;
-    pointer-events: none;
-    animation: matchAnimation 0.6s;
+.memory-card .back-face {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 2em;
+    border: 2px solid white;
 }
 
-@keyframes matchAnimation {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+.memory-card.matched .front-face {
+    border-color: #4caf50;
+    box-shadow: 0 0 10px #4caf50;
+}
+
+.game-controls {
+    text-align: center;
+    margin: 20px 0;
 }
 
 .timeline {
@@ -701,12 +710,6 @@ h3 {
 @keyframes slideFromLeft {
     from { opacity: 0; transform: translateX(-50px); }
     to { opacity: 1; transform: translateX(0); }
-}
-
-.timeline-date {
-    color: #e91e63;
-    font-weight: bold;
-    font-size: 1.2em;
 }
 
 /* ستايل لعبة ترتيب الكلمات الجديد */

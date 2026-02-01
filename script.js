@@ -5,10 +5,11 @@ let loveCount = 0;
 let memoryCards = [];
 let flippedCards = [];
 let matchedPairs = 0;
-let canFlip = true;
+let canFlip = false; // Changed initial state
 let photos = [];
 let musicPlaying = false;
 let gamesCompleted = 0;
+let memoryMoves = 0;
 
 // متغيرات لعبة ترتيب الكلمات
 let currentSentence = [];
@@ -32,6 +33,16 @@ const defaultPhotos = [
         src: 'https://i.postimg.cc/4yvRJTsR/01K111R8AHJS5G8S9ZY6V23MPX.jpg',
         caption: 'أحلى ذكرياتي معاكي 🌹'
     }
+];
+
+// صور لعبة الذاكرة (صور رمزية رومانسية)
+const memoryImagesList = [
+    'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=200&q=80', // Heart hands
+    'https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=200&q=80', // Couple holding hands
+    'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=200&q=80', // Love Letter
+    'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=200&q=80', // Flowers
+    'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=200&q=80', // Couple cats/cute
+    'https://images.unsplash.com/photo-1522265626305-594236628adc?w=200&q=80'  // Rings/Gift
 ];
 
 // تحميل الصور
@@ -397,48 +408,88 @@ document.getElementById('checkSentenceBtn').addEventListener('click', function()
 });
 
 
-// لعبة الذاكرة
+// ------------------------------------------------------------
+// لعبة الذاكرة المطورة (صور مع مهلة عرض)
+// ------------------------------------------------------------
 function initMemoryGame() {
     const game = document.getElementById('memoryGame');
+    const startBtn = document.getElementById('startMemoryBtn');
+    const stats = document.getElementById('memoryStats');
+    const msg = document.getElementById('memoryMsg');
+    
     if (!game) return;
     
+    // إعادة تعيين الحالة الأولية
     game.innerHTML = '';
     memoryCards = [];
     flippedCards = [];
     matchedPairs = 0;
-    canFlip = true;
-    updateMatchCount();
+    memoryMoves = 0;
+    canFlip = false;
     
-    const symbols = ['❤️', '💕', '💖', '💗', '💝', '💘', '💞', '💓'];
-    const cards = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+    msg.classList.add('hidden');
+    startBtn.style.display = 'inline-block'; // إظهار الزر
+    stats.classList.add('hidden');
     
-    cards.forEach((symbol) => {
+    // إنشاء الكروت (ولكن مخفية أو غير تفاعلية)
+    const cards = [...memoryImagesList, ...memoryImagesList].sort(() => Math.random() - 0.5);
+    
+    cards.forEach((imgUrl) => {
         const card = document.createElement('div');
         card.className = 'memory-card';
-        card.innerHTML = `<div class="card-content">❤️</div>`;
-        card.dataset.symbol = symbol;
+        // هيكل الكارت ثلاثي الأبعاد
+        card.innerHTML = `
+            <div class="card-face front-face">
+                <img src="${imgUrl}" alt="Love Memory">
+            </div>
+            <div class="card-face back-face">
+                ❓
+            </div>
+        `;
+        card.dataset.symbol = imgUrl;
+        
         card.addEventListener('click', function() {
             flipCard(this);
         });
+        
         game.appendChild(card);
         memoryCards.push(card);
     });
 }
 
+// بدء لعبة الذاكرة (الزر)
+document.getElementById('startMemoryBtn').addEventListener('click', function() {
+    this.style.display = 'none';
+    document.getElementById('memoryStats').classList.remove('hidden');
+    
+    // كشف جميع الكروت لمدة 3 ثواني
+    memoryCards.forEach(card => card.classList.add('flipped'));
+    
+    // عداد تنازلي بسيط يمكن إضافته هنا، ولكن سنكتفي بالقلب
+    setTimeout(() => {
+        memoryCards.forEach(card => card.classList.remove('flipped'));
+        canFlip = true;
+        showCustomAlert('ابدأي يا قلبي! 🧠💕');
+    }, 3000);
+});
+
 function updateMatchCount() {
     const countEl = document.getElementById('matchCount');
-    if (countEl) countEl.textContent = `أزواج: ${matchedPairs}/8 💖`;
+    const movesEl = document.getElementById('movesCount');
+    if (countEl) countEl.textContent = `${matchedPairs}/6`;
+    if (movesEl) movesEl.textContent = memoryMoves;
 }
 
 function flipCard(card) {
     if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
     
     card.classList.add('flipped');
-    card.querySelector('.card-content').textContent = card.dataset.symbol;
     flippedCards.push(card);
     
     if (flippedCards.length === 2) {
         canFlip = false;
+        memoryMoves++;
+        updateMatchCount();
         setTimeout(checkMatch, 800);
     }
 }
@@ -454,23 +505,22 @@ function checkMatch() {
         flippedCards = [];
         canFlip = true;
         
-        if (matchedPairs === 8) {
+        if (matchedPairs === 6) { // 6 أزواج
             createConfetti();
             updateGamesCompleted();
-            document.getElementById('memoryMsg').classList.remove('hidden');
-            document.getElementById('memoryMsg').textContent = '🎊 ممتازة يا قلبي! 🎊';
+            const msg = document.getElementById('memoryMsg');
+            msg.classList.remove('hidden');
+            msg.innerHTML = `🎊 ممتازة يا قلبي! 🎊<br>خلصتي اللعبة في ${memoryMoves} حركة بس!`;
             
             setTimeout(() => {
                 showPage(6);
                 setTimeout(() => updateProgress('progress5', 70), 100);
-            }, 2000);
-        }
+            }, 2500);
+        } அர
     } else {
         setTimeout(() => {
             card1.classList.remove('flipped');
             card2.classList.remove('flipped');
-            card1.querySelector('.card-content').textContent = '❤️';
-            card2.querySelector('.card-content').textContent = '❤️';
             flippedCards = [];
             canFlip = true;
         }, 400);
@@ -550,7 +600,7 @@ document.getElementById('openAlbumBtn').addEventListener('click', function() {
     const password = document.getElementById('albumPassword').value;
     const msg = document.getElementById('albumMsg');
     
-    if (password === 'ذكرياتنا2026' || password === 'ذكرياتنا 2026') {
+    if (password === '18/5/2025' || password === 'ذكرياتنا 2026') {
         msg.classList.add('hidden');
         createConfetti();
         updateGamesCompleted();
